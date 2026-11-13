@@ -37,4 +37,15 @@ describe('API Tests on Local Port', () => {
             expect(response.body[0]).toHaveProperty('name');
         }
     });
+
+    it('should return 500 when retrieving users fails', async () => {
+        getUsers.mockRejectedValue(new Error('Database error'));
+
+        const response = await request(server).get('/users');
+
+        expect(response.status).toBe(500);
+        expect(response.body).toEqual({
+            message: 'Failed to retrieve users'
+        });
+    });
 });

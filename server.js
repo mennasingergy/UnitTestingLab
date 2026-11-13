@@ -9,7 +9,7 @@ app.get('/users', async (req, res) => {
         const users = await getUsers();
         res.status(200).json(users);
     } catch (err) {
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Failed to retrieve users' });
     }
 });
 
