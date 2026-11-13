@@ -6,15 +6,7 @@ const getUsers = require('./getUsers');
 // Mock the getUsers module
 jest.mock('./getUsers');
 
-let server;
-
-beforeAll(async () => {
-    server = app.listen(3000);
-});
-
-afterAll((done) => {
-    server.close(done);
-});
+request(app);
 
 describe('API Tests on Local Port', () => {
     it('GET /users should return a list of users with the required properties', async () => {
@@ -24,25 +16,17 @@ describe('API Tests on Local Port', () => {
             { id: 2, name: 'Nadeen Serag' }
         ]);
 
-        const response = await request(server).get('/users');
-
+        const response = await request(app).get('/users');
         expect(response.status).toBe(200);
-
         expect(response.headers['content-type']).toMatch(/json/);
-
         expect(Array.isArray(response.body)).toBe(true);
-
-        if (response.body.length > 0) {
-            expect(response.body[0]).toHaveProperty('id');
-            expect(response.body[0]).toHaveProperty('name');
-        }
+        expect(response.body[0]).toHaveProperty('id');
+        expect(response.body[0]).toHaveProperty('name');
     });
 
     it('should return 500 when retrieving users fails', async () => {
         getUsers.mockRejectedValue(new Error('Database error'));
-
-        const response = await request(server).get('/users');
-
+        const response = await request(app).get('/users');
         expect(response.status).toBe(500);
         expect(response.body).toEqual({
             message: 'Failed to retrieve users'

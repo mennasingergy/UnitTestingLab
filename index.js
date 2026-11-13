@@ -7,13 +7,8 @@ app.use(express.json());
 app.get('/users', (req, res) => {
     res.status(200).json([{ id: 1, name: 'Menna Singergy' }, { id: 2, name: 'Nadeen Serag' }]);
 });
-app.listen(process.env.PORT || 5001, async () => {
-    console.log("The server is running on")
-
-});
 
 module.exports = app;
-
 
 
 
